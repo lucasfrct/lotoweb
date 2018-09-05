@@ -4,7 +4,8 @@
 	<title>Loto Web</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-	<script type="text/javascript">
+
+<script type="text/javascript">
 		/*
  AngularJS v1.7.2
  (c) 2010-2018 Google, Inc. http://angularjs.org
@@ -346,12 +347,11 @@ link:function(a,b,d,c){if(c){var e=-1;d.$observe("maxlength",function(a){a=ea(a)
 STANDALONEMONTH:"January February March April May June July August September October November December".split(" "),WEEKENDRANGE:[5,6],fullDate:"EEEE, MMMM d, y",longDate:"MMMM d, y",medium:"MMM d, y h:mm:ss a",mediumDate:"MMM d, y",mediumTime:"h:mm:ss a","short":"M/d/yy h:mm a",shortDate:"M/d/yy",shortTime:"h:mm a"},NUMBER_FORMATS:{CURRENCY_SYM:"$",DECIMAL_SEP:".",GROUP_SEP:",",PATTERNS:[{gSize:3,lgSize:3,maxFrac:3,minFrac:0,minInt:1,negPre:"-",negSuf:"",posPre:"",posSuf:""},{gSize:3,lgSize:3,maxFrac:2,
 minFrac:2,minInt:1,negPre:"-\u00a4",negSuf:"",posPre:"\u00a4",posSuf:""}]},id:"en-us",localeID:"en_US",pluralCat:function(a,c){var e=a|0,f=c;void 0===f&&(f=Math.min(b(a),3));Math.pow(10,f);return 1==e&&0==f?"one":"other"}})}]),y(function(){ye(D.document,Vc)}))})(window);!window.angular.$$csp().noInlineStyle&&window.angular.element(document.head).prepend('<style type="text/css">@charset "UTF-8";[ng\\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\\:form{display:block;}.ng-animate-shim{visibility:hidden;}.ng-anchor{position:absolute;}</style>');
 //# sourceMappingURL=angular.min.js.map
-
-	</script>
+</script>
 	<style type="text/css">
         html, 
         body, 
-        div {
+        body div {
             background-color: #212121;
             display: block;
             border: none;
@@ -368,19 +368,29 @@ minFrac:2,minInt:1,negPre:"-\u00a4",negSuf:"",posPre:"\u00a4",posSuf:""}]},id:"e
         }
 
         body, 
-        div {
+        body div {
             text-align: center;
 		}
 
-		div::after {
+		body div::after {
             content: "";
             clear: both;
             display: block; 
 		}
 
-        label {
+        body label {
             display: block;
             width: 100%;
+        }
+
+        body input {
+            padding-left: 8px;
+            border: none;
+            -webkit-border-radius: 2px;
+            -moz-border-radius: 2px;
+            -ms-border-radius: 2px;
+            -o-border-radius: 2px;
+            border-radius: 2px;
         }
 
         body .njogos {
@@ -392,13 +402,6 @@ minFrac:2,minInt:1,negPre:"-\u00a4",negSuf:"",posPre:"\u00a4",posSuf:""}]},id:"e
 
         body .njogos input {
             width: 80px;
-            padding-left: 8px;
-            border-bottom: solid 1px #AAA;
-            -webkit-border-radius: 2px;
-            -moz-border-radius: 2px;
-            -ms-border-radius: 2px;
-            -o-border-radius: 2px;
-            border-radius: 2px;
         }
 
         body .pre-sequence {
@@ -559,17 +562,24 @@ minFrac:2,minInt:1,negPre:"-\u00a4",negSuf:"",posPre:"\u00a4",posSuf:""}]},id:"e
             function gerate ( ) {
     			var $sequence =  [ ];
                 $scope.loto.sequences = [ ];
+                var $sumGroup = ( Number ( $scope.loto.nUnit ) + Number ( $scope.loto.nDez ) + Number ( $scope.loto.nVin ) );
 
-    			for ( var $i = 1; $i <= $scope.loto.nJogos; $i++ ) {
-    				$sequence = gerateSequence ( 
-                        $scope.loto.preSequence, 
-                        $scope.loto.nUnit, 
-                        $scope.loto.nDez, $scope.loto.nVin 
-                    );
-                    
-                    $scope.loto.sequences = clearArray( $scope.loto.sequences, $sequence );
-                    $scope.loto.sequences.push ( $sequence );
-    			};
+                if ( $sumGroup == 15  ) {
+
+        			for ( var $i = 1; $i <= $scope.loto.nJogos; $i++ ) {
+        				$sequence = gerateSequence ( 
+                            $scope.loto.preSequence, 
+                            $scope.loto.nUnit, 
+                            $scope.loto.nDez, 
+                            $scope.loto.nVin 
+                        );
+                        
+                        $scope.loto.sequences = clearArray( $scope.loto.sequences, $sequence );
+                        $scope.loto.sequences.push ( $sequence );
+        			};
+                } else {
+                    alert ( "O número dezenas por grupo está errado.  A soma dos três parâmeros deve ser igual a 15. \n A soma atual é:" + $sumGroup );
+                };
     		};
 
     		function addPreSequence ( $num ) {
@@ -698,7 +708,7 @@ minFrac:2,minInt:1,negPre:"-\u00a4",negSuf:"",posPre:"\u00a4",posSuf:""}]},id:"e
 	<div class="list">
 		<ul>
 			<li ng-repeat="sequence in loto.sequences">
-                <b>{{ ( $index + 1 ) }}</b>{{ sequence.map ( printItem ).join ( "-" ) }}
+                <b>{{ ( $index + 1 ) }})</b>{{ sequence.map ( printItem ).join ( "-" ) }}
             </li>
 		</ul>
 	</div>
