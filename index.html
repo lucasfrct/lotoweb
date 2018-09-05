@@ -349,50 +349,39 @@ minFrac:2,minInt:1,negPre:"-\u00a4",negSuf:"",posPre:"\u00a4",posSuf:""}]},id:"e
 
 	</script>
 	<style type="text/css">
-		body {
-			display: block;
-			margin: 0;
-			padding: 0;
-			box-sizing: border-box;
+        html, 
+        body, 
+        div {
+            background-color: #212121;
+            display: block;
             border: none;
+            box-sizing: border-box;
+            clear: both;
+            float: left;
+            font-family: Verdana, san-serif;
+            height: auto;
+            margin: 0;
+            padding: 0;
             position: relative;
             vertical-align: top;
-            text-align: center;
-            float: left;
-            clear: both;
-            font-family: Verdana, san-serif;
-		}
+            width: 100%;
+        }
 
-		div {
-			display: block;
-			clear: both;
-			box-sizing: border-box;
-			text-align: center;
-			position: relative;
-			border: none;
-			float: left;
-			width: 100%;
+        body, 
+        div {
+            text-align: center;
 		}
 
 		div::after {
+            content: "";
             clear: both;
             display: block; 
 		}
 
-		button {
-			display: block;
-			width: calc( 100% / 5 );
-			vertical-align: top;
-			float: left;
-			padding: 16px;
-			position: relative;
-			color: #262626;
-		}
-
-		label {
-			display: block;
+        label {
+            display: block;
             width: 100%;
-		}
+        }
 
         body .njogos {
             background-color: #00695C;
@@ -413,20 +402,26 @@ minFrac:2,minInt:1,negPre:"-\u00a4",negSuf:"",posPre:"\u00a4",posSuf:""}]},id:"e
         }
 
         body .pre-sequence {
-            background-color: #212121;
             color: #FFFFFF;
         }
+
         body .pre-sequence section, 
         body .dezenas section {
-            padding: 8px;
+            padding: 16px 8px 8px 8px;
         }
 
         body .pre-sequence button {
             background-color: #424242;
-            color: inherit;
-            border: none;
             border: solid 1px rgba( 255, 255, 255, 0.05 );
+            color: inherit;
+            display: block;
+            float: left;
             outline: 0;
+            padding: 16px 8px;
+            position: relative;
+            text-align: center;
+            vertical-align: top;
+            width: calc( 100% / 5 );
         }
 
         body .pre-sequence button.active {
@@ -435,18 +430,18 @@ minFrac:2,minInt:1,negPre:"-\u00a4",negSuf:"",posPre:"\u00a4",posSuf:""}]},id:"e
 
         body .dezenas {
             background-color: #00695C;
-            padding: 8px;
+            padding: 8px 8px 16px 8px;
             color: #FFFFFF;
         }
 
          body .dezenas label {
-            font-size: 0.8em;
-            padding: 0;
 			display: block;
 			float: left;
-            width: calc( 100% / 3);
+            font-size: 0.8em;
+            text-align: center;
+            padding: 0;
             vertical-align: top;
-			text-align: center;
+            width: calc( 100% / 3 );
          }
 
 		body .dezenas label input {
@@ -461,50 +456,48 @@ minFrac:2,minInt:1,negPre:"-\u00a4",negSuf:"",posPre:"\u00a4",posSuf:""}]},id:"e
 		}
 
         body .gerate {
-            background-color: #212121;
             color:  #FFFFFF;
-            padding: 8px;
+            padding: 16px 8px;
         }
 
         body .gerate button {
             background-color: #1B5E20;
-            display: block;
-            width: calc( 100% - 16px );
-            margin: 4px 8px;
-            padding: 16px 0;
-            color: #FFFFFF;
             border: none;
-            font-size: 1.3em;
+            color: #FFFFFF;
+            display: block;
             float: left;
+            font-size: 1.3em;
+            margin: 4px 8px;
             outline: 0;
+            padding: 16px 0;
+            width: calc( 100% - 16px );
         }
 
 		body .list {
-			position: relative;
-			margin: 0;
-			padding: 0;
-            width: 100%;
-            display: block;
-            min-height: 30px;
             background-color: #424242;
+            display: block;
+            margin: 0;
+            min-height: 30px;
+            padding: 0;
+            position: relative;
+            width: 100%;
 		}
 
 		body .list ul {
 			display: block;
 			margin: 0;
-			padding: 0;
-            width: 100%;
             padding: 8px 0;
+            width: 100%;
 		}
 
 		body .list ul li {
-			display: inline-block;
-			width: calc( 100% - 28px );
-			border: none;
-			padding: 8px;
-			background-color: rgba( 255, 255, 255, 0.1 );
+            background-color: rgba( 255, 255, 255, 0.1 );
+            border: none;
             color: #FFFFFF;
+            display: inline-block;
             margin: 1px 0;
+            padding: 8px;
+			width: calc( 100% - 28px );
 		}
 
         body .list ul li:nth-child( even ) {
@@ -517,6 +510,18 @@ minFrac:2,minInt:1,negPre:"-\u00a4",negSuf:"",posPre:"\u00a4",posSuf:""}]},id:"e
 		body .list ul li b {
 			padding: 0 16px 0 0;
 		}
+
+        body .njogos,
+        body .pre-sequence,
+        body .dezenas,
+        body .gerate,
+        body .list {
+            max-width: 800px;
+            margin: 0 auto;
+            float: none;
+            border-left: solid 1px rgba( 255, 255, 255, 0.2 );
+            border-right: solid 1px rgba( 255, 255, 255, 0.2 );
+        }
 	</style>
 	<script type="text/javascript">
     	angular
@@ -683,9 +688,9 @@ minFrac:2,minInt:1,negPre:"-\u00a4",negSuf:"",posPre:"\u00a4",posSuf:""}]},id:"e
 	</div>
 	<div class="dezenas">
 		<section>Números de dezenas por grupos</section>
-		<label>0 - 10<input type="number" name="" ng-model="loto.nUnit"></label>
-		<label>11 - 20<input type="number" name="" ng-model="loto.nDez"></label>
-		<label>21 - 25<input type="number" name="" ng-model="loto.nVin"></label>
+		<label>0 a 10<input type="number" name="" ng-model="loto.nUnit"></label>
+		<label>11 a 20<input type="number" name="" ng-model="loto.nDez"></label>
+		<label>21 a 25<input type="number" name="" ng-model="loto.nVin"></label>
 	</div>
     <div class="gerate">
         <button class="gerar" ng-click="gerate ( )">Gerar Jogos</button>
@@ -697,7 +702,5 @@ minFrac:2,minInt:1,negPre:"-\u00a4",negSuf:"",posPre:"\u00a4",posSuf:""}]},id:"e
             </li>
 		</ul>
 	</div>
-	<p class="text"></p>
-
 </body>
 </html>
