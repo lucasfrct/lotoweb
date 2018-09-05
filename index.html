@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-br" ng-app="loto">
+<html lang="pt-br" ng-app="lotoweb">
 <head>
 	<title>Loto Web</title>
 	<meta charset="utf-8">
@@ -352,8 +352,15 @@ minFrac:2,minInt:1,negPre:"-\u00a4",negSuf:"",posPre:"\u00a4",posSuf:""}]},id:"e
 		body {
 			display: block;
 			margin: 0;
-			padding: 8px;
+			padding: 0;
 			box-sizing: border-box;
+            border: none;
+            position: relative;
+            vertical-align: top;
+            text-align: center;
+            float: left;
+            clear: both;
+            font-family: Verdana, san-serif;
 		}
 
 		div {
@@ -362,23 +369,14 @@ minFrac:2,minInt:1,negPre:"-\u00a4",negSuf:"",posPre:"\u00a4",posSuf:""}]},id:"e
 			box-sizing: border-box;
 			text-align: center;
 			position: relative;
-			border: solid 1px #F00;
+			border: none;
 			float: left;
 			width: 100%;
 		}
 
 		div::after {
-			clear: both;
-			display: block;
-		}
-
-		section {
-			display: block;
-			margin: 8px 0;
-			border: solid 1px #BBB;
-			padding: 8px;
-			background-color: #DDD;
-			box-sizing: border-box;
+            clear: both;
+            display: block; 
 		}
 
 		button {
@@ -393,298 +391,270 @@ minFrac:2,minInt:1,negPre:"-\u00a4",negSuf:"",posPre:"\u00a4",posSuf:""}]},id:"e
 
 		label {
 			display: block;
+            width: 100%;
 		}
 
-		.dezenas label {
-			width: calc( ( 100% / 3 ) - 6px );
+        body .njogos {
+            background-color: #00695C;
+            padding: 8px;
+            font-size: 1em;
+            color: #FFFFFF;
+        }
+
+        body .njogos input {
+            width: 80px;
+            padding-left: 8px;
+            border-bottom: solid 1px #AAA;
+            -webkit-border-radius: 2px;
+            -moz-border-radius: 2px;
+            -ms-border-radius: 2px;
+            -o-border-radius: 2px;
+            border-radius: 2px;
+        }
+
+        body .pre-sequence {
+            background-color: #212121;
+            color: #FFFFFF;
+        }
+        body .pre-sequence section, 
+        body .dezenas section {
+            padding: 8px;
+        }
+
+        body .pre-sequence button {
+            background-color: #424242;
+            color: inherit;
+            border: none;
+            border: solid 1px rgba( 255, 255, 255, 0.05 );
+            outline: 0;
+        }
+
+        body .pre-sequence button.active {
+            background-color: #B71C1C;
+        }
+
+        body .dezenas {
+            background-color: #00695C;
+            padding: 8px;
+            color: #FFFFFF;
+        }
+
+         body .dezenas label {
+            font-size: 0.8em;
+            padding: 0;
 			display: block;
-			vertical-align: top;
 			float: left;
-			margin: 0 2px 16px 0;
+            width: calc( 100% / 3);
+            vertical-align: top;
 			text-align: center;
-		}
+         }
 
-		.dezenas label input {
+		body .dezenas label input {
 			display: block;
-			width: calc( 100% - 8px );
+			width: calc( 70% - 12px );
 			position: relative;
-			margin: 0 4px;
+			margin: 0 auto 0 auto;
 			text-align: center;
+            border: none;
+            outline: 0;
+            padding: 4px;
 		}
 
-		.list {
+        body .gerate {
+            background-color: #212121;
+            color:  #FFFFFF;
+            padding: 8px;
+        }
+
+        body .gerate button {
+            background-color: #1B5E20;
+            display: block;
+            width: calc( 100% - 16px );
+            margin: 4px 8px;
+            padding: 16px 0;
+            color: #FFFFFF;
+            border: none;
+            font-size: 1.3em;
+            float: left;
+            outline: 0;
+        }
+
+		body .list {
 			position: relative;
 			margin: 0;
 			padding: 0;
+            width: 100%;
+            display: block;
+            min-height: 30px;
+            background-color: #424242;
 		}
 
-		.list ul {
+		body .list ul {
 			display: block;
 			margin: 0;
 			padding: 0;
+            width: 100%;
+            padding: 8px 0;
 		}
 
-		.list ul li {
+		body .list ul li {
 			display: inline-block;
-			width: 100%;
-			border: solid 1px #FFF;
-			padding: 8px 0;
-			background-color: #EEE;
+			width: calc( 100% - 28px );
+			border: none;
+			padding: 8px;
+			background-color: rgba( 255, 255, 255, 0.1 );
+            color: #FFFFFF;
+            margin: 1px 0;
 		}
 
-		.list ul li b {
-			padding: 0 12px 0 0;
-		}
+        body .list ul li:nth-child( even ) {
+            background-color: rgba( 255, 255, 255, 0.05 );
+        }
+        body .list ul li:nth-child( odd ) {
+            background-color: rgba( 255, 255, 255, 0.2 );
+        }
 
-		.gerar {
-			display: block;
-			width: 94% !important;
-			margin: 1% 3% 3% 3%;
-			background: #0F0 !important;
+		body .list ul li b {
+			padding: 0 16px 0 0;
 		}
-
-		.active {
-			background-color: #F00;
-			color: #FFF;
-		}
-
 	</style>
-
 	<script type="text/javascript">
+    	angular
+            .module ( "lotoweb", [ ] );
+    	angular
+            .module( "lotoweb" )
+            .controller ( "geratesequences", [ "$scope", "$document", GerateSequences ] );
+    	function GerateSequences ( $scope, $document ) {
 
-	angular.module ( "loto", [] );
-	angular.module( "loto" ).controller ( "gerate", [ "$scope", "$document", Gerate ] );
+            var buttonObserver = $document.find ( "button" );
+            buttonObserver.on ( "click", function ( ) {
+                if ( this.className != "gerar" ) {
+                    var $num = this.innerHTML;
+                    var $state = ( this.className != "active" ) ? true : false;
+                    this.className = ( $state ) ? "active" : "";
+                    ( $state ) ? addPreSequence ( $num ) : removePreSequence ( $num );
+                };
+            } );
 
-	function Gerate ( $scope, $document ) {
+            $scope.loto = {
+                nJogos: 10,
+                preSequence: [ ],
+                nUnit: 6,
+                nDez: 6,
+                nVin: 3,
+                sequences: [ ],
+            };
+            $scope.printItem = printItem;
+    		$scope.gerate = gerate;
 
-		$scope.loto = {
-			nJogos: 10,
-			preSequence: [ ],
-			nUnit: 6,
-			nDez: 6,
-			nVin: 3,
-			sequences: [ 
-			],
-		};
+            function printItem ( $item ) {
+                return ( $item < 10 ) ? String ( "0"+ $item ) : String ( $item );
+            };
 
-		var buttonObserver = $document.find("button");
-		console.log ( buttonObserver );
+            function gerate ( ) {
+    			var $sequence =  [ ];
+                $scope.loto.sequences = [ ];
 
-		buttonObserver.on ( "click", function ( ) {
-			if ( this.className != "gerar" ) {
-				var $num =this.innerHTML;
-				var $state = ( this.className != "active" ) ? true : false;
-				
-				if ( $state ) {
-					addPreSequence ( $num );
-					this.className = "active";
-				} else {
-					removePreSequence ( $num );
-					this.className = "";
-				};
-			};
-		} );
+    			for ( var $i = 1; $i <= $scope.loto.nJogos; $i++ ) {
+    				$sequence = gerateSequence ( 
+                        $scope.loto.preSequence, 
+                        $scope.loto.nUnit, 
+                        $scope.loto.nDez, $scope.loto.nVin 
+                    );
+                    
+                    $scope.loto.sequences = clearArray( $scope.loto.sequences, $sequence );
+                    $scope.loto.sequences.push ( $sequence );
+    			};
+    		};
 
-		$scope.gerar = function ( ) {
+    		function addPreSequence ( $num ) {
+    			if ( $scope.loto.preSequence.length < 15 ) {
+    				$scope.loto.preSequence.push ( Number ( $num ) );
+    			};
+    			console.log ( $scope.loto.preSequence );
+    		};
 
-			var $sequence;
+    		function removePreSequence ( $num ) {
+    			$index = $scope.loto.preSequence.indexOf ( Number ( $num ) );
+    			if ($index > -1) {
+     	 			$scope.loto.preSequence.splice ( $index, 1 );
+    			};
+    			console.log ( $scope.loto.preSequence );
+    		};
 
-			for ( var $i = 0; $i < $scope.loto.nJogos; $i++ ) {
-				$sequence = gerateSequence ( $scope.loto.preSequence, $scope.loto.nUnit, $scope.loto.nDez, $scope.loto.nVin );
-				console.log ( $sequence );
-				 $sequence = null;
-				//$scope.loto.sequences = clearArray( $scope.loto.sequences, $sequence );
-				//$scope.loto.sequences.push ( $sequence );
-			};
+    		function gerateSequence ( $preSequence, $nUnit, $nDez, $nVin ) {
+    			var $Gsequence = [ ];
+    			var $stateUnit = false;
+    			var $stateDez = false;
+    			var $stateVin = false;
+                $Gsequence = $Gsequence.concat( $preSequence );
 
-			console.log ( "gerar" );
-		};
+    			for (var $i = 0; $Gsequence.length < 15; $i++) {
+    				
+    				var $num = Math.floor ( Math.random ( ) * 25 + 1 );
 
-		//$scope.loto.sequences = clearArray( $scope.loto.sequences, $sequence );
+    				if ( $Gsequence.indexOf ( $num ) == -1 ) {
 
-		//console.log ();
+    					if ( $num <= 10 && !$stateUnit && counted ( $Gsequence, filterUnit ) < $nUnit ) {
+    						$Gsequence.push ( $num );
+    					};
+    					$stateUnit = ( counted ( $Gsequence, filterUnit ) >= $nUnit ) ? true : false;
 
-		//gerateSequence ( $scope.loto.preSequence, $scope.loto.nUnit, $scope.loto.nDez, $scope.loto.nVin )
+    					if ( $num > 10 && $num <= 20 && !$stateDez && counted ( $Gsequence, filterDez ) < $nDez ) {
+    						$Gsequence.push ( $num );
+    					};
+    					$stateDez = ( counted ( $Gsequence, filterDez ) >= $nDez ) ? true : false;
 
-		function addPreSequence ( $num ) {
-			if ( $scope.loto.preSequence.length < 15 ) {
-				$scope.loto.preSequence.push ( Number ( $num ) );
-			};
-			console.log ( $scope.loto.preSequence );
-		};
+    					if ( $num > 20 && !$stateVin && counted ( $Gsequence, filterVin ) < $nVin ) {
+    						$Gsequence.push ( $num );
+    					};
+    					$stateVin = ( counted ( $Gsequence, filterVin ) >= $nVin ) ? true : false;	
+    				};
 
-		function removePreSequence ( $num ) {
-			$index = $scope.loto.preSequence.indexOf ( Number ( $num ) );
-			if ($index > -1) {
- 	 			$scope.loto.preSequence.splice ( $index, 1 );
-			};
-			console.log ( $scope.loto.preSequence );
-		};
+    			};
 
-		function gerateSequence ( $preSequence, $nUnit, $nDez, $nVin ) {
-			var $sequence = $preSequence;
-			var $stateUnit = false;
-			var $stateDez = false;
-			var $stateVin = false;
+    			return $Gsequence.sort ( sorted );
+    		};
 
-			for (var $i = 0; $sequence.length < 15; $i++) {
-				
-				var $num = Math.floor ( Math.random ( ) * 25 + 1 );
+    		function filterUnit ( $value ) {
+    			return $value <= 10;
+    		};
 
-				if ( $sequence.indexOf ( $num ) == -1 ) {
+    		function filterDez ( $value ) {
+    			return $value > 10 && $value <= 20;
+    		};
 
-					if ( $num <= 10 && !$stateUnit && counted ( $sequence, filterUnit ) < $nUnit ) {
-						$sequence.push ( $num );
-					};
-					$stateUnit = ( counted ( $sequence, filterUnit ) >= $nUnit ) ? true : false;
+    		function filterVin ( $value ) {
+    			return $value > 20;
+    		};
 
-					if ( $num > 10 && $num <= 20 && !$stateDez && counted ( $sequence, filterDez ) < $nDez ) {
-						$sequence.push ( $num );
-					};
-					$stateDez = ( counted ( $sequence, filterDez ) >= $nDez ) ? true : false;
+    		function counted ( $sequence, $filter ) {
+    			$filtered = $sequence.filter ( $filter );
+    			return $filtered.length;
+    		};
 
-					if ( $num > 20 && !$stateVin && counted ( $sequence, filterVin ) < $nVin ) {
-						$sequence.push ( $num );
-					};
-					$stateVin = ( counted ( $sequence, filterVin ) >= $nVin ) ? true : false;	
-				};
+    		function sorted ( $a, $b ){
+      			return ( $a - $b );
+    		};
 
-			};
+    		function compareArray ( $arrA, $arrB ) {
+    			return  ( $arrA.toString ( ) == $arrB.toString ( ) ) ? true : false;
+    		};
 
-			return $sequence.sort ( sorted );
-		};
-
-		function filterUnit ( $value ) {
-			return $value <= 10;
-		};
-
-		function filterDez ( $value ) {
-			return $value > 10 && $value <= 20;
-		};
-
-		function filterVin ( $value ) {
-			return $value > 20;
-		};
-
-		function counted ( $sequence, $filter ) {
-			$filtered = $sequence.filter ( $filter );
-			return $filtered.length;
-		};
-
-		function sorted ( $a, $b ){
-  			return ( $a - $b );
-		};
-
-		function compareArray ( $arrA, $arrB ) {
-			return  ( $arrA.toString ( ) == $arrB.toString ( ) ) ? true : false;
-		};
-
-		function clearArray ( $sequences, $sequence ) {
-			return $sequences.filter ( function ( $item ) {
-				return !compareArray ( $item, $sequence );
-			} );
-		};
-
-	}
-
-	var numberSequences = 10;
-	var preSequence = [ 1, 5, 12, 18, 21, 22 ];
-	var quantUnit = 6;
-	var quantDecimal = 6;
-	var quantTwoDecimal = 3;
-	var Sequences = [ ];
-
-	
-
-
-	/*for ( var i = 0; Sequences.length < numberSequences; i++ ) {
-		s = gerateSequence ( sequence );
-		if ( Sequences.indexOf ( s ) == -1 ) {
-			Sequences.push ( gerateSequence ( sequence ) );
-		};
-	};
-
-	function gerateSequence ( insetSequence ) {
-		var seq = [];
-
-		var stateUnit = false;
-		var stateDecimal = false;
-		var stateTwoDecimal = false;
-
-		seq = seq.concat ( insetSequence );
-
-		for (var i = 0; seq.length < 15; i++) {
-			
-			var num = Math.floor ( Math.random ( ) * 25 + 1 );
-
-			if ( seq.indexOf ( num ) == -1 ){
-
-				if ( !stateUnit && quantUnidade (  ) < quantUnit && num <= 10 ) {
-					seq.push ( num );
-				};
-				stateUnit = ( quantUnidade (  ) == quantUnit ) ? true : false;
-
-				if ( !stateDecimal && quantDecimo (  ) < quantDecimal && ( num >= 11 && num <= 20 )) {
-					seq.push ( num );
-				};
-				stateDecimal = ( quantDecimo (  ) == quantDecimal ) ? true : false;
-
-				if ( !stateTwoDecimal && quantTwo ( ) < quantTwoDecimal && num >= 21) {
-					seq.push ( num );
-				};
-				stateTwoDecimal = ( quantTwo (  ) == stateTwoDecimal ) ? true : false;
-			};
-		};
-
-		return seq.sort(sortfunction);
-	};
-	 
-	function quantUnidade ( ) {
-		var conta = 0;
-		sequence.map ( function ( item ) {
-			if ( item <= 10 ) {
-				conta++;
-			};
-		} );
-		return conta;
-	};
-
-	function quantDecimo ( ) {
-		var conta = 0;
-		sequence.map ( function ( item ) {
-			if ( item >= 11 && item <= 20 ) {
-				conta++;
-			};
-		} );
-		return conta;
-	};
-
-	function quantTwo ( ) {
-		var conta = 0;
-		sequence.map ( function ( item ) {
-			if ( item >= 21 && item <= 25 ) {
-				conta++;
-			};
-		} );
-		return conta;
-	};
-
-	function sortfunction(a, b){
-  		return (a - b) //faz com que o array seja ordenado numericamente e de ordem crescente.
-	};
-	*/
-
-	/*var t_sequence = document.querySelector ( ".t_sequence" );
-
-
-	var el = document.querySelector ( ".text" );
-	el.innerHTML = JSON.stringify(Sequences) + ": " + Sequences.length;*/
-</script>
+    		function clearArray ( $sequences, $sequence ) {
+    			return $sequences.filter ( function ( $item ) {
+    				return !compareArray ( $item, $sequence );
+    			} );
+    		};
+    	};
+    </script>
 </head>
-<body ng-controller="gerate">
-	<div>Número de Jogos: <input type="number" name="" value="" ng-model="loto.nJogos"></div>
-	<div class="tcl">
-		<section>pre sequence</section>
+<body ng-controller="geratesequences">
+	<div class="njogos">
+        <label>Número de Jogos: <input type="number" name="" value="" ng-model="loto.nJogos"></label>
+    </div>
+	<div class="pre-sequence">
+		<section>Predefinir Sequência</section>
 		<button>01</button>
 		<button>02</button>
 		<button>03</button>
@@ -716,11 +686,15 @@ minFrac:2,minInt:1,negPre:"-\u00a4",negSuf:"",posPre:"\u00a4",posSuf:""}]},id:"e
 		<label>0 - 10<input type="number" name="" ng-model="loto.nUnit"></label>
 		<label>11 - 20<input type="number" name="" ng-model="loto.nDez"></label>
 		<label>21 - 25<input type="number" name="" ng-model="loto.nVin"></label>
-		<button class="gerar" ng-click="gerar ( )">Gerar Jogos</button>
 	</div>
+    <div class="gerate">
+        <button class="gerar" ng-click="gerate ( )">Gerar Jogos</button>
+    </div>
 	<div class="list">
 		<ul>
-			<li ng-repeat="sequence in loto.sequences"><b>{{ ( $index + 1 ) }}</b>{{ sequence.join ( "-" ) }}</li>
+			<li ng-repeat="sequence in loto.sequences">
+                <b>{{ ( $index + 1 ) }}</b>{{ sequence.map ( printItem ).join ( "-" ) }}
+            </li>
 		</ul>
 	</div>
 	<p class="text"></p>
