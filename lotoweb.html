@@ -393,24 +393,43 @@ minFrac:2,minInt:1,negPre:"-\u00a4",negSuf:"",posPre:"\u00a4",posSuf:""}]},id:"e
             border-radius: 2px;
         }
 
-        body .njogos {
+        body .games {
             background-color: #00695C;
             padding: 8px;
             font-size: 1em;
             color: #FFFFFF;
         }
 
-        body .njogos input {
+        body .games input {
             width: 80px;
         }
 
         body .pre-sequence {
             color: #FFFFFF;
+            clear: both;
+        }
+
+        body .pre-sequence section::after {
+            clear: both;
+            display: block;
+            content: "";
         }
 
         body .pre-sequence section, 
         body .dezenas section {
             padding: 16px 8px 8px 8px;
+
+        }
+
+        body .pre-sequence section a {
+            background-color:lightsteelblue;
+            padding: 4px 8px;
+            margin: 0px 0px 0px 0px;
+            float: right;
+            clear: both;
+            line-height: 18px;
+            font-size: 0.8rem;
+            cursor: pointer;
         }
 
         body .pre-sequence button {
@@ -502,6 +521,7 @@ minFrac:2,minInt:1,negPre:"-\u00a4",negSuf:"",posPre:"\u00a4",posSuf:""}]},id:"e
             margin: 1px 0;
             padding: 8px;
 			width: calc( 100% - 28px );
+            transition: all 0.3s ease-in-out;
 		}
 
         body .list ul li:nth-child( even ) {
@@ -511,11 +531,18 @@ minFrac:2,minInt:1,negPre:"-\u00a4",negSuf:"",posPre:"\u00a4",posSuf:""}]},id:"e
             background-color: rgba( 255, 255, 255, 0.2 );
         }
 
+        body .list ul li:hover,
+        body .list ul li:focus {
+            transform: scale(1.05);
+            background-color: rgba( 255, 0, 0, 0.5 );
+            padding: 16px 8px;
+        }
+
 		body .list ul li b {
 			padding: 0 16px 0 0;
 		}
 
-        body .njogos,
+        body .games,
         body .pre-sequence,
         body .dezenas,
         body .gerate,
@@ -532,44 +559,89 @@ minFrac:2,minInt:1,negPre:"-\u00a4",negSuf:"",posPre:"\u00a4",posSuf:""}]},id:"e
             .module ( "lotoweb", [ ] );
     	angular
             .module( "lotoweb" )
-            .controller ( "geratesequences", [ "$scope", "$document", GerateSequences ] );
-    	function GerateSequences ( $scope, $document ) {
+            .controller ( "geratesequences", [ "$scope", "$document", GenerateSequences ] );
 
-            var buttonObserver = $document.find ( "button" );
-            buttonObserver.on ( "click", function ( ) {
-                if ( this.className != "gerar" ) {
-                    var $num = this.innerHTML;
-                    var $state = ( this.className != "active" ) ? true : false;
-                    this.className = ( $state ) ? "active" : "";
-                    ( $state ) ? addPreSequence ( $num ) : removePreSequence ( $num );
-                };
-            } );
+        angular
+            .module( "lotoweb" )
+            .filter('range', [GenerateRange]);
+
+    	function GenerateSequences ( $scope, $document ) {
+
+            $scope.control = {
+                keyboardSize: 25,
+                mode: "Incluir", // include or exclude
+                sequenceLength: 15,
+                unit: 0,
+                dez: 0,
+                vin: 0,
+            }
 
             $scope.loto = {
-                nJogos: 10,
-                preSequence: [ ],
+                games: 10,
+                selected: [ ],
                 nUnit: 6,
                 nDez: 6,
                 nVin: 3,
                 sequences: [ ],
             };
-            $scope.printItem = printItem;
-    		$scope.gerate = gerate;
 
-            function printItem ( $item ) {
-                return ( $item < 10 ) ? String ( "0"+ $item ) : String ( $item );
+            $scope.buttonObserver = ButtonObserver
+
+            $scope.printItem = printItem;
+    		$scope.generate = generate;
+            $scope.modeToggle = ModeToggle
+
+            function ButtonObserver($el) {
+
+                var $num = this.n
+
+                var element = angular.element($el.target)
+
+                var $status = element[0].classList.toggle("active")
+
+                if($status){ 
+                    addSelection($num)
+                } else {
+                    removeSelection($num)
+                }
+
             };
 
-            function gerate ( ) {
-    			var $sequence =  [ ];
+            function printItem ( $item ) {
+                return String("0"+$item).substr(-2);
+            };
+
+            function generate ( ) {
+                var $sequence =  [ ];
+                var $state = false
                 $scope.loto.sequences = [ ];
                 var $sumGroup = ( Number ( $scope.loto.nUnit ) + Number ( $scope.loto.nDez ) + Number ( $scope.loto.nVin ) );
 
-                if ( $sumGroup == 15  ) {
+                if ($scope.control.mode == "Incluir") {
+                    $state = ( $scope.control.unit <= $scope.loto.nUnit)
+                    $state = ( $state && $scope.control.dez <= $scope.loto.nDez)
+                    $state = ( $state && $scope.control.vin <= $scope.loto.nVin)
+ 
+                    if (!$state) {
+                        alert("A sequencia selecionada é maior que o número de dezenas escolhido")
+                    }
+                }
 
-        			for ( var $i = 1; $i <= $scope.loto.nJogos; $i++ ) {
-        				$sequence = gerateSequence ( 
-                            $scope.loto.preSequence, 
+                if ($scope.control.mode == "Excluir") {
+                    $state = ( $scope.control.unit <= ( 10 - $scope.loto.nUnit ))
+                    $state = ( $state && $scope.control.dez <= ( 10 - $scope.loto.nDez ))
+                    $state = ( $state && $scope.control.vin <= ( 5 - $scope.loto.nVin))
+ 
+                    if (!$state) {
+                        alert("A sequencia selecionada é maior que o número de dezenas escolhido. \n Descelecione alguns números da sequência")
+                    }
+                }
+
+                if ( $state && $sumGroup == 15 ) {
+
+        			for ( var $i = 1; $i <= $scope.loto.games; $i++ ) {
+        				$sequence = generateSequence ( 
+                            $scope.loto.selected, 
                             $scope.loto.nUnit, 
                             $scope.loto.nDez, 
                             $scope.loto.nVin 
@@ -579,37 +651,43 @@ minFrac:2,minInt:1,negPre:"-\u00a4",negSuf:"",posPre:"\u00a4",posSuf:""}]},id:"e
                         $scope.loto.sequences.push ( $sequence );
         			};
                 } else {
-                    alert ( "O número dezenas por grupo está errado.  A soma dos três parâmeros deve ser igual a 15. \n A soma atual é:" + $sumGroup );
+                    alert ( "O número de dezenas por grupo está errado.  A soma dos três parâmeros deve ser igual a 15. \n A soma atual é:" + $sumGroup );
                 };
     		};
 
-    		function addPreSequence ( $num ) {
-    			if ( $scope.loto.preSequence.length < 15 ) {
-    				$scope.loto.preSequence.push ( Number ( $num ) );
+    		function addSelection ( $num ) {
+    			if ( $scope.loto.selected.length < 15 ) {
+                    $num = Number ( $num )
+    				$scope.loto.selected.push ( $num )
+
+                    counterGroup($num, "++")
     			};
-    			console.log ( $scope.loto.preSequence );
     		};
 
-    		function removePreSequence ( $num ) {
-    			$index = $scope.loto.preSequence.indexOf ( Number ( $num ) );
+    		function removeSelection( $num ) {
+                $num = Number ( $num )
+    			$index = $scope.loto.selected.indexOf ( $num );
     			if ($index > -1) {
-     	 			$scope.loto.preSequence.splice ( $index, 1 );
+     	 			$scope.loto.selected.splice ( $index, 1 );
+                    counterGroup($num, "--")
     			};
-    			console.log ( $scope.loto.preSequence );
     		};
 
-    		function gerateSequence ( $preSequence, $nUnit, $nDez, $nVin ) {
+    		function generateSequence ( $selected, $nUnit, $nDez, $nVin ) {
     			var $Gsequence = [ ];
     			var $stateUnit = false;
     			var $stateDez = false;
     			var $stateVin = false;
-                $Gsequence = $Gsequence.concat( $preSequence );
 
-    			for (var $i = 0; $Gsequence.length < 15; $i++) {
-    				
-    				var $num = Math.floor ( Math.random ( ) * 25 + 1 );
+                if ($scope.control.mode != "Excluir") {
+                    $Gsequence = $Gsequence.concat($selected) 
+                }
 
-    				if ( $Gsequence.indexOf ( $num ) == -1 ) {
+    			for (var $i = 0; $Gsequence.length < $scope.control.sequenceLength ; $i++) {
+
+                    var $num = Math.floor ( Math.random ( ) * $scope.control.keyboardSize + 1 );
+
+    				if ( $Gsequence.indexOf ( $num ) == -1 && modeNumber($selected, $num) ) {
 
     					if ( $num <= 10 && !$stateUnit && counted ( $Gsequence, filterUnit ) < $nUnit ) {
     						$Gsequence.push ( $num );
@@ -624,13 +702,20 @@ minFrac:2,minInt:1,negPre:"-\u00a4",negSuf:"",posPre:"\u00a4",posSuf:""}]},id:"e
     					if ( $num > 20 && !$stateVin && counted ( $Gsequence, filterVin ) < $nVin ) {
     						$Gsequence.push ( $num );
     					};
-    					$stateVin = ( counted ( $Gsequence, filterVin ) >= $nVin ) ? true : false;	
+    					$stateVin = ( counted ( $Gsequence, filterVin ) >= $nVin ) ? true : false;
+  	
     				};
 
     			};
 
+                console.log("GENERATE END", $Gsequence.length, $scope.control.sequenceLength)
+
     			return $Gsequence.sort ( sorted );
     		};
+
+            function modeNumber($colletion, $num) {
+                return ($scope.control.mode == "Excluir") ? $colletion.indexOf ( $num ) == -1 : true
+            }
 
     		function filterUnit ( $value ) {
     			return $value <= 10;
@@ -662,40 +747,49 @@ minFrac:2,minInt:1,negPre:"-\u00a4",negSuf:"",posPre:"\u00a4",posSuf:""}]},id:"e
     				return !compareArray ( $item, $sequence );
     			} );
     		};
+
+            function ModeToggle() {
+                $scope.control.mode = ( $scope.control.mode == "Incluir") ? "Excluir" : "Incluir"
+            }
+
+            function counterGroup($number, $action) {
+                
+                if (filterUnit($number)) {
+                    ($action == "++" ) ? $scope.control.unit++ : $scope.control.unit--;
+                }
+
+                if (filterDez($number)) {
+                    ($action == "++" ) ? $scope.control.dez++ : $scope.control.dez--;
+                }
+
+                if (filterVin($number)) {
+                    ($action == "++" ) ? $scope.control.vin++ : $scope.control.vin--;
+                }
+                
+
+            }
     	};
+
+        function GenerateRange ( ) {
+            return function(input, total) {
+                total = parseInt(total);
+
+                for (var i=1; i <= total; i++) {
+                    input.push( String("0"+i).substr(-2) );
+                }
+
+                return input;
+            };
+        }
     </script>
 </head>
 <body ng-controller="geratesequences">
-	<div class="njogos">
-        <label>Número de Jogos: <input type="number" name="" value="" ng-model="loto.nJogos"></label>
+	<div class="games">
+        <label>Número de Jogos: <input type="number" name="" value="" ng-model="loto.games"></label>
     </div>
 	<div class="pre-sequence">
-		<section>Predefinir Sequência</section>
-		<button>01</button>
-		<button>02</button>
-		<button>03</button>
-		<button>04</button>
-		<button>05</button>
-		<button>06</button>
-		<button>07</button>
-		<button>08</button>
-		<button>09</button>
-		<button>10</button>
-		<button>11</button>
-		<button>12</button>
-		<button>13</button>
-		<button>14</button>
-		<button>15</button>
-		<button>16</button>
-		<button>17</button>
-		<button>18</button>
-		<button>19</button>
-		<button>20</button>
-		<button>21</button>
-		<button>22</button>
-		<button>23</button>
-		<button>24</button>
-		<button>25</button>
+        <section>Predefinir Sequência <a ng-click="modeToggle()">{{control.mode}}</a></section>
+		<button ng-repeat="n in [] | range: 25" ng-click="buttonObserver($event)" class="ac">{{n}}</button>
 	</div>
 	<div class="dezenas">
 		<section>Números de dezenas por grupos</section>
@@ -704,7 +798,7 @@ minFrac:2,minInt:1,negPre:"-\u00a4",negSuf:"",posPre:"\u00a4",posSuf:""}]},id:"e
 		<label>21 a 25<input type="number" name="" ng-model="loto.nVin"></label>
 	</div>
     <div class="gerate">
-        <button class="gerar" ng-click="gerate ( )">Gerar Jogos</button>
+        <button class="gerar" ng-click="generate()">Gerar Jogos</button>
     </div>
 	<div class="list">
 		<ul>
